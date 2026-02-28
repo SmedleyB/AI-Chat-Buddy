@@ -1,62 +1,61 @@
-# AI-Chat-Buddy
-
-## Project Overview
-AI-Chat-Buddy is a conversational AI framework designed to facilitate engaging interactions with users through intelligent responses.
+# AI Chat Buddy Documentation
 
 ## Features
-- Natural Language Processing (NLP) capabilities
-- Multi-platform support
-- Customizable response generation
-- Integration with various APIs
+- WOPR voice chat application
+- Gemini API integration
+- Voice selection and customization
+- Multi-language support
+- Conversation logging and management
 
 ## Getting Started
-### Prerequisites
-- Node.js (version x.x.x)
-- npm (version x.x.x)
-
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/SmedleyB/AI-Chat-Buddy.git
-   cd AI-Chat-Buddy
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+1. **Clone the Repository**: `git clone https://github.com/SmedleyB/AI-Chat-Buddy.git`
+2. **Install Dependencies**: Navigate to the project directory and run `npm install` to install required packages.
 
 ## Usage Instructions
-To start the application:
-```bash
-npm start
-```
+- Run the application with `npm start`. Ensure that all configurations are set in the `.env` file.
 
 ## File Versions
-- Version 1.0.0: Initial release
-- Version 1.1.0: Added new features 
-- Version 1.2.0: Bug fixes and performance improvements
+- **README.md** - v1.0.0
+- **index.js** - v1.1.0
 
 ## Technology Stack
 - Node.js
 - Express.js
-- MongoDB
-- React.js
+- Socket.io
+- Gemini API
 
 ## Troubleshooting
-If you encounter issues, try the following steps:
-- Ensure all dependencies are installed.
-- Check the console for error messages.
-- Restart the application.
+### Common Issues
+1. **Application not starting**: Ensure that all dependencies are installed.
+2. **Voice not recognized**: Check your microphone settings and permissions.
 
 ## Customization
-You can customize the AI's responses by modifying the `responses.json` file.
+- To customize voice selection, modify the `voiceSettings.json` file with desired parameters.
 
 ## Browser Compatibility
-The application is compatible with the latest versions of Chrome, Firefox, and Safari.
+- Compatible with the latest versions of Chrome, Firefox, and Safari.
 
 ## Credits
-Developed by SmedleyB and contributors.
+- Developed by SmedleyB.
+- Special thanks to the contributors and community for their feedback.
 
-## License Information
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## License
+- This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## WOPR Voice Chat Application
+Discusses how to utilize the WOPR voice chat feature effectively and its integration within the broader application.
+
+## Gemini API Integration
+Detailed explanation of how to integrate and use the Gemini API for enhanced functionalities.
+
+## Voice Selection
+Instructions on how to customize voice selections and the impact of different voices on user experience.
+
+## Language Support
+Overview of languages supported by the AI Chat Buddy and instructions on adding new languages.
+
+## Conversation Logging
+Information about conversation logging features and data management options.
+
+## Setup Instructions
+Step-by-step guide for setting up the AI Chat Buddy application in a local environment, including configuration files and dependencies.
