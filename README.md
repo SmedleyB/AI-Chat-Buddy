@@ -1,57 +1,47 @@
-# AI Chat Buddy
-
-## Introduction
-The AI Chat Buddy is an application designed to engage users in natural conversation using advanced AI technologies.
+# WOPR Voice Chat Application Documentation
 
 ## Features
-- Natural Language Processing
-- Customizable chat interface
-- Integration with multiple platforms
+- Voice chat functionality
+- Real-time communication
+- User-friendly interface
+- Customizable settings
 
-## Installation
-1. Clone the repository:
-   ```
-   git clone https://github.com/SmedleyB/AI-Chat-Buddy.git
-   ```
-2. Navigate to the project directory:
-   ```
-   cd AI-Chat-Buddy
-   ```
-3. Install dependencies:
-   ```
-   npm install
-   ```
+## Setup Instructions
+1. **Clone the repository:**  
+   `git clone https://github.com/SmedleyB/AI-Chat-Buddy.git`
 
-## Usage
-1. Start the application:
-   ```
-   npm start
-   ```
-2. Open your web browser and go to `http://localhost:3000`.
-3. You can interact with the AI Chat Buddy directly through the web interface.
+2. **Install dependencies:**  
+   Navigate to the project directory and run:  
+   `npm install`
 
-## Customization
-- To change the chat settings, modify the `config.js` file in the root directory.
-- You can add new intents or modify existing ones in the `intents` folder.
+3. **Configuration:**  
+   Create a `.env` file based on the `.env.example` file and set your configurations.
 
-## Contributing
-1. Fork the repository.
-2. Create a feature branch:
-   ```
-   git checkout -b feature/YourFeature
-   ```
-3. Commit your changes:
-   ```
-   git commit -m 'Add some feature'
-   ```
-4. Push to the branch:
-   ```
-   git push origin feature/YourFeature
-   ```
-5. Open a pull request.
+4. **Run the application:**  
+   Execute the following command:  
+   `npm start`
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Usage Guide
+- Access the application in your web browser at `http://localhost:3000`
+- Create an account or log in to start chatting.
 
-## Contact
-For any inquiries, please reach out to the maintainer.
+## Troubleshooting
+- **Issue:** Application won’t start.
+  - **Solution:** Ensure all dependencies are installed correctly. Check your `.env` configuration.
+
+- **Issue:** Unable to connect to the server.
+  - **Solution:** Verify server status and network connection.
+
+## Customization Options
+- Adjust settings in the `settings.js` file to change layout, themes, and other preferences.
+- Modify `config.json` for advanced configurations.
+
+## Security Notes
+- Keep your dependencies up to date to avoid vulnerabilities.
+- Validate user inputs to prevent injection attacks.
+- Implement HTTPS in production environments for secure communication.
+
+## Conclusion
+Thank you for using the WOPR voice chat application! For further assistance, please open an issue on GitHub or reach out via our support channels.  
+
+---
