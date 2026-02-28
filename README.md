@@ -1,5 +1,7 @@
 # 🎮 AI-Chat-Buddy - WOPR Command Center
 
+This project is a copy of the original gemini-native-audio-test (https://github.com/AggrMod/gemini-native-audio-test) project.
+
 A retro-futuristic voice chat interface powered by Google's Gemini AI. Experience a nostalgic 1980s computer terminal aesthetic while having natural conversations with an advanced AI assistant.
 
 ## Features
