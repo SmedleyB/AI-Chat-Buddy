@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <title>WOPR - COMMAND CENTER (OPTIMIZED)</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root { 
+      --volume: 0; 
+      --neon: #00ff00; 
+      --user-color: #00ffff; 
+      --ai-color: #00ff00; 
+      --nebula-opacity: 0;
+      --bg-color: #000000;
+      --grid-color: #ff00ff; /* Neon Pink as requested */
+    }
+    * { box-sizing: border-box; cursor: crosshair; }
+    
+    body {
+      background: var(--bg-color); color: var(--neon); font-family: 'VT323', monospace;
+      margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase;
+      transition: background 0.8s ease;
+    }
+
+    /* OPTIMIZED CRT OVERLAY (No massive blurs/flickers) */
+    body::before {
+      content: " "; display: block; position: absolute; inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+      z-index: 200; background-size: 100% 4px; pointer-events: none;
+    }
+    body::after {
+      content: " "; display: block; position: absolute; inset: 0;
+      background: rgba(18, 16, 16, 0.05); z-index: 200; pointer-events: none;
+      animation: steadyFlicker 4s infinite linear;
+    }
+    @keyframes steadyFlicker { 
+      0%, 100% { opacity: 0.1; } 50% { opacity: 0.15; } 
+    }
+
+    #background-grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+    #clock { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; z-index: 100; color: var(--grid-color); opacity: 0.6; }
+
+    #core-container {
+      position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+      z-index: 10; display: flex; flex-direction: column; align-items: center;
+    }
+
+    #core {
+      width: 35vmin; height: 35vmin; border: 4px solid var(--neon); border-radius: 50%;
+      transform: scale(calc(1 + var(--volume) * 0.5));
+      box-shadow: 0 0 calc(15px + var(--volume) * 40px) var(--neon);
+      transition: transform 0.1s ease-out, border-color 0.3s;
+      background: rgba(0,0,0,0.9); position: relative; overflow: hidden;
+    }
+
+    #nebula-canvas {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      opacity: var(--nebula-opacity); transition: opacity 0.5s;
+    }
+
+    #status { margin-top: 40px; font-size: 1.8rem; letter-spacing: 4px; text-shadow: 0 0 10px var(--neon); }
+
+    .interface-box {
+      position: absolute; border: 1px solid #330033; background: rgba(0, 0, 0, 0.9);
+      padding: 15px; z-index: 110; transition: transform 0.4s ease;
+    }
+
+    #config-panel { top: 60px; left: 20px; width: 320px; border-left: 5px solid var(--grid-color); }
+    #config-panel.hidden { transform: translateX(-120%); }
+
+    #toggleConfigBtn {
+      position: absolute; top: 20px; left: 20px; z-index: 120;
+      background: none; border: 1px solid var(--grid-color); color: var(--grid-color); width: auto; font-size: 0.8rem; padding: 2px 8px;
+    }
+
+    #transcript-panel { bottom: 20px; left: 20px; right: 20px; height: 25%; display: flex; flex-direction: column; }
+    #transcript { flex-grow: 1; overflow-y: scroll; scrollbar-width: none; font-size: 1.3rem; }
+    #transcript::-webkit-scrollbar { display: none; }
+
+    #saveBtn { background: none; border: 1px solid #440044; color: #660066; width: auto; padding: 2px 10px; font-size: 0.8rem; align-self: flex-end; }
+
+    input, button { background: #110011; border: 1px solid var(--grid-color); color: var(--grid-color); font-family: 'VT323'; width: 100%; padding: 6px; font-size: 1.2rem; margin-top: 5px; }
+    button:hover:not(:disabled) { background: var(--grid-color); color: #000; }
+
+    .voice-btn { font-size: 10px; padding: 4px; border: 1px solid #440044; width: auto; background: none; color: var(--grid-color); }
+    .voice-btn.selected { background: var(--grid-color); color: #000; }
+
+    .user-msg { color: var(--user-color); }
+    .ai-msg { color: var(--ai-color); }
+  </style>
+</head>
+<body>
+
+  <button id="toggleConfigBtn" onclick="toggleConfig()">[ SETTINGS ]</button>
+  <div id="clock">SYS_TIME: 00:00:00</div>
+
+  <div id="terminal">
+    <canvas id="background-grid"></canvas>
+    <div id="core-container">
+        <div id="core"><canvas id="nebula-canvas"></canvas></div>
+        <div id="status">INIT_SYSTEM...</div>
+    </div>
+
+    <div id="config-panel" class="interface-box">
+      <input type="password" id="apiKey" placeholder="GEMINI_KEY">
+      <input type="text" id="langCode" value="en-GB">
+      <div class="voice-grid" id="voiceGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 5px;"></div>
+      <button id="startBtn" onclick="startConversation()">[ START_LINK ]</button>
+      <button id="stopBtn" onclick="stopConversation()" disabled>[ TERMINATE ]</button>
+    </div>
+
+    <div id="transcript-panel" class="interface-box">
+      <div id="transcript">AWAITING_COMMUNICATION_LINK...</div>
+      <button id="saveBtn" onclick="saveLog()">[ DOWNLOAD_LOG ]</button>
+    </div>
+  </div>
+
+  <script type="module">
+    let lastTime = 0;
+    const nebCanvas = document.getElementById('nebula-canvas');
+    const nebCtx = nebCanvas.getContext('2d', { alpha: true });
+    const bgCanvas = document.getElementById('background-grid');
+    const bgCtx = bgCanvas.getContext('2d', { alpha: false }); // Performance boost: no alpha
+    
+    // --- UI & CLOCK ---
+    window.toggleConfig = () => document.getElementById('config-panel').classList.toggle('hidden');
+    setInterval(() => {
+      const n = new Date();
+      document.getElementById('clock').textContent = `SYS_TIME: ${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}:${n.getSeconds().toString().padStart(2,'0')}`;
+    }, 1000);
+
+    // --- OPTIMIZED NEBULA (Radial Gradients instead of Filter Blur) ---
+    let particles = [];
+    const initNeb = () => {
+      nebCanvas.width = nebCanvas.height = 250;
+      for(let i=0; i<15; i++) particles.push({ x:125, y:125, r:Math.random()*30+20, vx:(Math.random()-0.5)*1.5, vy:(Math.random()-0.5)*1.5, life:Math.random() });
+    };
+    const drawNeb = () => {
+      nebCtx.clearRect(0,0,250,250);
+      particles.forEach(p => {
+        const g = nebCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        g.addColorStop(0, `rgba(0, 255, 0, ${p.life * 0.4})`);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        nebCtx.fillStyle = g;
+        nebCtx.beginPath(); nebCtx.arc(p.x, p.y, p.r, 0, Math.PI*2); nebCtx.fill();
+        p.x += p.vx; p.y += p.vy; p.life -= 0.007;
+        if(p.life <= 0) { p.x = 125; p.y = 125; p.life = 1; }
+      });
+    };
+
+    // --- OPTIMIZED GRID ---
+    let offset = 0;
+    const drawGrid = () => {
+      bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight;
+      bgCtx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-color');
+      bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
+      bgCtx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--grid-color');
+      bgCtx.lineWidth = 1; bgCtx.globalAlpha = 0.3;
+      offset += 0.5; const spacing = 70; const scroll = offset % spacing;
+      
+      for (let x = 0; x < bgCanvas.width; x += spacing) {
+        bgCtx.beginPath(); bgCtx.moveTo(bgCanvas.width/2, bgCanvas.height/3);
+        bgCtx.lineTo(x, bgCanvas.height); bgCtx.stroke();
+      }
+      for (let y = 0; y < bgCanvas.height; y += spacing) {
+        let ay = y + scroll; bgCtx.beginPath(); bgCtx.moveTo(0, ay); bgCtx.lineTo(bgCanvas.width, ay); bgCtx.stroke();
+      }
+    };
+
+    // --- MAIN ENGINE (30 FPS Throttling) ---
+    function loop(t) {
+      if (t - lastTime > 32) { // Target ~30fps to save battery/GPU
+        drawGrid();
+        drawNeb();
+        lastTime = t;
+      }
+      requestAnimationFrame(loop);
+    }
+    initNeb(); loop(0);
+
+    // --- CORE LOGIC (Gemini) ---
+    const VOICES = ['Achird', 'Algenib', 'Algieba', 'Enceladus', 'Schedar', 'Orus', 'Leda', 'Zephyr'];
+    let selectedVoice = 'Enceladus', audioContext, mediaStream, processor, websocket, isRunning = false;
+    let playbackCtx, playbackAnalyser, inputAnalyser, currentAnalyser, dataArray, audioSources = [], scheduledTime = 0;
+
+    const savedKey = localStorage.getItem('gemini_api_key');
+    if (savedKey) document.getElementById('apiKey').value = savedKey;
+
+    const vGrid = document.getElementById('voiceGrid');
+    VOICES.forEach(n => {
+      const b = document.createElement('button');
+      b.className = 'voice-btn' + (n === selectedVoice ? ' selected' : '');
+      b.textContent = n;
+      b.onclick = () => { document.querySelectorAll('.voice-btn').forEach(x => x.classList.remove('selected')); b.classList.add('selected'); selectedVoice = n; };
+      vGrid.appendChild(b);
+    });
+
+    const addMsg = (t, type) => {
+      const tr = document.getElementById('transcript');
+      const m = document.createElement('div'); m.className = `${type}-msg`; m.textContent = `> ${t}`;
+      tr.appendChild(m); tr.scrollTop = tr.scrollHeight;
+    };
+
+    window.saveLog = () => {
+      const b = new Blob([document.getElementById('transcript').innerText], { type: 'text/plain' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `WOPR_LOG.txt`; a.click();
+    };
+
+    const updateVis = () => {
+      if (!currentAnalyser || !isRunning) return;
+      currentAnalyser.getByteFrequencyData(dataArray);
+      document.documentElement.style.setProperty('--volume', (dataArray.reduce((a, b) => a + b, 0) / dataArray.length) / 255);
+      requestAnimationFrame(updateVis);
+    };
+
+    window.startConversation = async () => {
+      const key = document.getElementById('apiKey').value.trim();
+      if (!key ) return alert('SEC_KEY_REQUIRED');
+      localStorage.setItem('gemini_api_key', key);
+      document.getElementById('config-panel').classList.add('hidden');
+      document.getElementById('startBtn').disabled = true;
+      document.getElementById('stopBtn').disabled = false;
+
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioContext = new AudioContext({ sampleRate: 16000 });
+        inputAnalyser = audioContext.createAnalyser();
+        inputAnalyser.fftSize = 128; // Reduced fftSize for performance
+        dataArray = new Uint8Array(inputAnalyser.frequencyBinCount);
+        const src = audioContext.createMediaStreamSource(mediaStream);
+        src.connect(inputAnalyser); currentAnalyser = inputAnalyser;
+        isRunning = true; updateVis();
+
+        websocket = new WebSocket(`wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${key}`);
+
+        websocket.onopen = () => {
+          document.getElementById('status').textContent = 'LINK_ESTABLISHED';
+          websocket.send(JSON.stringify({
+            setup: { model: `models/gemini-2.5-flash-native-audio-preview-12-2025`, // Native audio compatible
+              generation_config: { response_modalities: ['AUDIO'],
+                speech_config: { voice_config: { prebuilt_voice_config: { voice_name: selectedVoice } } }
+              }
+            }
+          }));
+          websocket.send(JSON.stringify({ clientContent: { turns: [{ role: "user", parts: [{ text: `Use language code ${document.getElementById('langCode').value}.` }] }], turnComplete: true } }));
+          startCapture();
+        };
+
+        websocket.onmessage = async (e) => {
+          if (!isRunning) return;
+          const d = JSON.parse(e.data instanceof Blob ? await e.data.text() : e.data);
+          if (d.serverContent?.modelTurn?.parts) {
+            document.documentElement.style.setProperty('--neon', 'var(--ai-color)');
+            document.documentElement.style.setProperty('--nebula-opacity', '1');
+            for (const p of d.serverContent.modelTurn.parts) {
+              if (p.inlineData?.data) {
+                document.getElementById('status').textContent = 'TRANSMITTING';
+                await playAudio(p.inlineData.data);
+              }
+              if (p.text) addMsg(p.text, 'ai');
+            }
+          }
+          if (d.serverContent?.turnComplete) {
+            document.documentElement.style.setProperty('--neon', 'var(--user-color)');
+            document.documentElement.style.setProperty('--nebula-opacity', '0');
+            currentAnalyser = inputAnalyser;
+            document.getElementById('status').textContent = 'LISTENING';
+          }
+        };
+        websocket.onclose = () => isRunning && stopConversation();
+      } catch (e) { addMsg('ERROR: ' + e.message, 'system'); stopConversation(); }
+    };
+
+    const startCapture = () => {
+      processor = audioContext.createScriptProcessor(4096, 1, 1);
+      processor.onaudioprocess = (e) => {
+        if (!isRunning || websocket?.readyState !== 1) return;
+        const inp = e.inputBuffer.getChannelData(0);
+        const pcm = new Int16Array(inp.length);
+        for (let i = 0; i < inp.length; i++) pcm[i] = Math.max(-32768, Math.min(32767, inp[i] * 32768));
+        websocket.send(JSON.stringify({ realtimeInput: { mediaChunks: [{ mimeType: 'audio/pcm', data: btoa(String.fromCharCode(...new Uint8Array(pcm.buffer))) }] } }));
+      };
+      audioContext.createMediaStreamSource(mediaStream).connect(processor);
+      processor.connect(audioContext.destination);
+    };
+
+    const playAudio = async (b64) => {
+      if (!isRunning) return;
+      if (!playbackCtx) {
+        playbackCtx = new AudioContext({ sampleRate: 24000 });
+        playbackAnalyser = playbackCtx.createAnalyser();
+        playbackAnalyser.connect(playbackCtx.destination);
+      }
+      currentAnalyser = playbackAnalyser;
+      const b = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+      const i16 = new Int16Array(b.buffer);
+      const buf = playbackCtx.createBuffer(1, i16.length, 24000);
+      const chan = buf.getChannelData(0);
+      for (let i = 0; i < i16.length; i++) chan[i] = i16[i] / 32768.0;
+      const s = playbackCtx.createBufferSource();
+      s.buffer = buf; s.connect(playbackAnalyser);
+      const start = Math.max(scheduledTime, playbackCtx.currentTime + 0.05);
+      s.start(start); scheduledTime = start + buf.duration;
+      audioSources.push(s);
+    };
+
+    window.stopConversation = async () => {
+      isRunning = false;
+      document.documentElement.style.setProperty('--neon', '#00ff00');
+      document.documentElement.style.setProperty('--nebula-opacity', '0');
+      if (websocket) websocket.close();
+      if (audioContext) await audioContext.close();
+      if (playbackCtx) await playbackCtx.close();
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('stopBtn').disabled = true;
+      document.getElementById('status').textContent = 'OFFLINE';
+    };
+  </script>
+</body>
+</html>
