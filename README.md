@@ -1,47 +1,62 @@
-# WOPR Voice Chat Application Documentation
+# AI-Chat-Buddy
+
+## Project Overview
+AI-Chat-Buddy is a conversational AI framework designed to facilitate engaging interactions with users through intelligent responses.
 
 ## Features
-- Voice chat functionality
-- Real-time communication
-- User-friendly interface
-- Customizable settings
+- Natural Language Processing (NLP) capabilities
+- Multi-platform support
+- Customizable response generation
+- Integration with various APIs
 
-## Setup Instructions
-1. **Clone the repository:**  
-   `git clone https://github.com/SmedleyB/AI-Chat-Buddy.git`
+## Getting Started
+### Prerequisites
+- Node.js (version x.x.x)
+- npm (version x.x.x)
 
-2. **Install dependencies:**  
-   Navigate to the project directory and run:  
-   `npm install`
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/SmedleyB/AI-Chat-Buddy.git
+   cd AI-Chat-Buddy
+   ```
 
-3. **Configuration:**  
-   Create a `.env` file based on the `.env.example` file and set your configurations.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-4. **Run the application:**  
-   Execute the following command:  
-   `npm start`
+## Usage Instructions
+To start the application:
+```bash
+npm start
+```
 
-## Usage Guide
-- Access the application in your web browser at `http://localhost:3000`
-- Create an account or log in to start chatting.
+## File Versions
+- Version 1.0.0: Initial release
+- Version 1.1.0: Added new features 
+- Version 1.2.0: Bug fixes and performance improvements
+
+## Technology Stack
+- Node.js
+- Express.js
+- MongoDB
+- React.js
 
 ## Troubleshooting
-- **Issue:** Application won’t start.
-  - **Solution:** Ensure all dependencies are installed correctly. Check your `.env` configuration.
+If you encounter issues, try the following steps:
+- Ensure all dependencies are installed.
+- Check the console for error messages.
+- Restart the application.
 
-- **Issue:** Unable to connect to the server.
-  - **Solution:** Verify server status and network connection.
+## Customization
+You can customize the AI's responses by modifying the `responses.json` file.
 
-## Customization Options
-- Adjust settings in the `settings.js` file to change layout, themes, and other preferences.
-- Modify `config.json` for advanced configurations.
+## Browser Compatibility
+The application is compatible with the latest versions of Chrome, Firefox, and Safari.
 
-## Security Notes
-- Keep your dependencies up to date to avoid vulnerabilities.
-- Validate user inputs to prevent injection attacks.
-- Implement HTTPS in production environments for secure communication.
+## Credits
+Developed by SmedleyB and contributors.
 
-## Conclusion
-Thank you for using the WOPR voice chat application! For further assistance, please open an issue on GitHub or reach out via our support channels.  
-
----
+## License Information
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
