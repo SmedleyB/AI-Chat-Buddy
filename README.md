@@ -1,61 +1,26 @@
-# AI Chat Buddy Documentation
+# 🎮 AI-Chat-Buddy - WOPR Command Center
+
+A retro-futuristic voice chat interface powered by Google's Gemini AI. Experience a nostalgic 1980s computer terminal aesthetic while having natural conversations with an advanced AI assistant.
 
 ## Features
-- WOPR voice chat application
-- Gemini API integration
-- Voice selection and customization
-- Multi-language support
-- Conversation logging and management
+
+- 🎙️ **Voice Input & Output**: Real-time speech recognition and synthesis
+- 🌈 **Retro Terminal UI**: Authentic CRT scanlines, neon colors, and cyber aesthetics
+- 🔊 **8 Unique AI Voices**: Choose from Achird, Algenib, Algieba, Enceladus, Schedar, Orus, Leda, or Zephyr
+- 🌍 **Multi-Language Support**: Chat in any language using ISO 639-1 language codes
+- 📝 **Conversation Logging**: Download complete chat transcripts as text files
+- ⚡ **Two Versions**: Standard and low-performance optimized builds
 
 ## Getting Started
-1. **Clone the Repository**: `git clone https://github.com/SmedleyB/AI-Chat-Buddy.git`
-2. **Install Dependencies**: Navigate to the project directory and run `npm install` to install required packages.
 
-## Usage Instructions
-- Run the application with `npm start`. Ensure that all configurations are set in the `.env` file.
+### Prerequisites
+- A modern web browser (Chrome, Firefox, Safari, Edge)
+- A [Google Gemini API key](https://aistudio.google.com/apikey)
+- Microphone access permission for voice input
 
-## File Versions
-- **README.md** - v1.0.0
-- **index.js** - v1.1.0
+### Installation
 
-## Technology Stack
-- Node.js
-- Express.js
-- Socket.io
-- Gemini API
-
-## Troubleshooting
-### Common Issues
-1. **Application not starting**: Ensure that all dependencies are installed.
-2. **Voice not recognized**: Check your microphone settings and permissions.
-
-## Customization
-- To customize voice selection, modify the `voiceSettings.json` file with desired parameters.
-
-## Browser Compatibility
-- Compatible with the latest versions of Chrome, Firefox, and Safari.
-
-## Credits
-- Developed by SmedleyB.
-- Special thanks to the contributors and community for their feedback.
-
-## License
-- This project is licensed under the MIT License. See the LICENSE file for more details.
-
-## WOPR Voice Chat Application
-Discusses how to utilize the WOPR voice chat feature effectively and its integration within the broader application.
-
-## Gemini API Integration
-Detailed explanation of how to integrate and use the Gemini API for enhanced functionalities.
-
-## Voice Selection
-Instructions on how to customize voice selections and the impact of different voices on user experience.
-
-## Language Support
-Overview of languages supported by the AI Chat Buddy and instructions on adding new languages.
-
-## Conversation Logging
-Information about conversation logging features and data management options.
-
-## Setup Instructions
-Step-by-step guide for setting up the AI Chat Buddy application in a local environment, including configuration files and dependencies.
+1. **Clone or download the repository**
+   ```bash
+   git clone https://github.com/SmedleyB/AI-Chat-Buddy.git
+   cd AI-Chat-Buddy
